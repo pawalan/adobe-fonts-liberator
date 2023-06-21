@@ -31,10 +31,10 @@ if ( Test-Path -Path "$DestinationDir\*" ) {
 Get-ChildItem -Path $AdobeFontsDir | ForEach-Object {
 
     $binary = Join-Path -Path $PSScriptRoot -ChildPath 'otfinfo.exe'
-    $args = ' --info ' + $_.FullName
+    $args = ' --postscript-name ' + $_.FullName
     $command = $binary + $args
 
-    $fontName = ((Invoke-Expression $command | Select-String -Pattern '^PostScript name:(\s+)(.*)$') -replace 'PostScript name:', '').Trim()
+    $fontName = (Invoke-Expression $command).Trim()
     $fontFile = Join-Path -Path $DestinationDir -ChildPath "$fontName.otf"
 
     Copy-Item -Path $_.FullName -Destination $fontFile
