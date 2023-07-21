@@ -28,7 +28,7 @@ if ( Test-Path -Path "$DestinationDir\*" ) {
 }
 
 
-Get-ChildItem -Path $AdobeFontsDir | ForEach-Object {
+Get-ChildItem -Path $AdobeFontsDir -Force | ForEach-Object {
 
     $binary = Join-Path -Path $PSScriptRoot -ChildPath 'otfinfo.exe'
     $args = ' --postscript-name ' + $_.FullName
