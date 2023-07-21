@@ -17,6 +17,8 @@ $DestinationDir = Join-Path -Path $DesktopDir -ChildPath 'Adobe Fonts'
 ######################### script code - don't change unless you know what you do! ###############################################
 Clear-Host
 
+Add-Type -AssemblyName System.Drawing
+
 Write-Output "`n`rLiberating Adobe Fonts`n`r`n`rfrom`t$AdobeFontsDir`n`rto`t`t$DestinationDir`n`r`n`r"
 
 
@@ -30,11 +32,10 @@ if ( Test-Path -Path "$DestinationDir\*" ) {
 
 Get-ChildItem -Path $AdobeFontsDir | ForEach-Object {
 
-    $binary = Join-Path -Path $PSScriptRoot -ChildPath 'otfinfo.exe'
-    $args = ' --postscript-name ' + $_.FullName
-    $command = $binary + $args
+    $fontCollection = New-Object System.Drawing.Text.PrivateFontCollection
+    $fontCollection.AddFontFile($_.FullName)
 
-    $fontName = (Invoke-Expression $command).Trim()
+    $fontName = $fontCollection.Families[-1].Name
     $fontFile = Join-Path -Path $DestinationDir -ChildPath "$fontName.otf"
 
     Copy-Item -Path $_.FullName -Destination $fontFile
